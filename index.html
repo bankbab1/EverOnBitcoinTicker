@@ -79,19 +79,13 @@
 
     .changelog {
       display: none;
-      text-align: left; /* ✅ Always left aligned */
+      text-align: left;
       font-size: 0.85rem;
       background: #f8f8f8;
       padding: 10px 14px;
       border-radius: 8px;
       margin-top: 6px;
-      line-height: 1.5;
-      color: #222;
-    }
-
-    .changelog ul {
-      margin: 6px 0 0 16px;
-      padding: 0;
+      line-height: 1.4;
     }
 
     footer {
@@ -102,10 +96,6 @@
 
     /* 📱 Mobile layout */
     @media (max-width: 700px) {
-      h1 { font-size: 1.6rem; }
-      h2 { font-size: 0.95rem; }
-      body { padding: 10px; }
-
       table, thead, tbody, th, td, tr { display: block; width: 100%; }
       thead { display: none; }
 
@@ -138,7 +128,7 @@
         text-align: right;
       }
 
-      /* ✅ Fix button */
+      /* ✅ Make Download button full width and fix stacking */
       .download-btn {
         width: 100%;
         display: block;
@@ -148,16 +138,13 @@
         font-size: 1rem;
       }
 
-      /* ✅ Make changelog left-aligned even on mobile */
       .changelog {
         display: none;
         font-size: 0.9rem;
         background: #f5f5f5;
-        padding: 10px 14px;
+        padding: 10px;
         border-radius: 8px;
-        margin-top: 10px;
-        text-align: left;
-        line-height: 1.5;
+        margin-top: 8px;
       }
     }
   </style>
@@ -216,7 +203,7 @@
           tr.appendChild(downloadTd);
           tbody.appendChild(tr);
 
-          // changelog section
+          // changelog toggle
           if (fw.changelog && fw.changelog.length > 0) {
             const logTr = document.createElement('tr');
             const logTd = document.createElement('td');
