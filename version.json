@@ -1,0 +1,24 @@
+{
+  "latest_version": "20251026",
+  "firmwares": [
+    {
+      "version": "20251026",
+      "status": "active",
+      "firmware_url": "everon_btc_ticker_20251026.bin",
+      "release_date": "2025-10-26",
+      "changelog": [
+        "Append 120 crypto pairs",
+        "Adding crypto logos"
+      ]
+    },
+    {
+      "version": "20251025",
+      "status": "obsolete",
+      "release_date": "2025-10-25",
+      "changelog": [
+        "Initial public release",
+        "Added OTA web interface"
+      ]
+    }
+  ]
+}
