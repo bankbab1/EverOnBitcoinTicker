@@ -11,6 +11,7 @@
       --muted: #777;
       --bg: #fff;
       --text: #1a1a1a;
+      --disabled: #ccc;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,14 +30,13 @@
       align-items: center;
       gap: 8px;
     }
-
     h2 {
       font-size: 1rem;
       color: var(--muted);
       margin: 0.8rem 0 1.4rem;
     }
 
-    /* ===== TABLE STYLES ===== */
+    /* ===== TABLE ===== */
     .table-wrapper {
       width: 100%;
       max-width: 800px;
@@ -58,18 +58,13 @@
       padding: 14px 16px;
       border-bottom: 1px solid #eee;
       vertical-align: middle;
+      text-align: center;
     }
 
     th {
       background: #f3f3f3;
       font-weight: 600;
       font-size: 0.95rem;
-      text-align: center;
-    }
-
-    td {
-      font-size: 0.95rem;
-      text-align: center;
     }
 
     .status-active { color: var(--primary); font-weight: 600; }
@@ -92,9 +87,15 @@
       display: inline-block;
       transition: background 0.2s ease;
     }
+    .download-btn:hover { background: var(--primary-dark); }
 
-    .download-btn:hover {
-      background: var(--primary-dark);
+    /* Disabled button */
+    .download-btn.disabled {
+      background: var(--disabled);
+      color: #666;
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.7;
     }
 
     /* ===== CHANGELOG CARD ===== */
@@ -103,11 +104,12 @@
       border-left: 4px solid var(--primary);
       text-align: left;
       padding: 14px 18px;
-      margin: 12px 0 18px 0;
+      margin: 10px 0 15px;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       line-height: 1.55;
       font-size: 0.9rem;
+      display: none; /* ✅ collapsed by default */
     }
 
     .changelog strong {
@@ -122,45 +124,28 @@
       list-style-type: disc;
     }
 
+    tr.clickable-row {
+      cursor: pointer;
+      transition: background 0.1s ease;
+    }
+    tr.clickable-row:hover {
+      background: #fafafa;
+    }
+
     footer {
       margin-top: 40px;
       font-size: 0.8rem;
       color: var(--muted);
     }
 
-    /* ===== MOBILE OPTIMIZATION ===== */
+    /* ===== MOBILE ===== */
     @media (max-width: 600px) {
       h1 { font-size: 1.6rem; }
       h2 { font-size: 0.95rem; }
       body { padding: 20px 10px; }
-
-      .table-wrapper {
-        box-shadow: none;
-        border-radius: 0;
-      }
-
-      table {
-        font-size: 0.9rem;
-        min-width: 100%;
-      }
-
-      th, td {
-        padding: 10px 8px;
-      }
-
-      .download-btn {
-        width: 100%;
-        max-width: 220px;
-        margin: 4px auto;
-        text-align: center;
-        padding: 12px 0;
-        font-size: 0.95rem;
-      }
-
-      .changelog {
-        margin: 10px 6px 18px;
-        padding: 12px 14px;
-      }
+      table { font-size: 0.9rem; min-width: 100%; }
+      .download-btn { width: 100%; max-width: 220px; margin: 4px auto; }
+      .changelog { margin: 10px; padding: 12px 14px; }
     }
   </style>
 </head>
@@ -199,6 +184,7 @@
 
         data.firmwares.forEach((fw) => {
           const versionRow = document.createElement('tr');
+          versionRow.classList.add('clickable-row');
           versionRow.innerHTML = `
             <td>
               <strong>${fw.version}</strong>
@@ -208,11 +194,16 @@
               ${fw.status.charAt(0).toUpperCase() + fw.status.slice(1)}
             </td>
             <td>
-              <a href="${fw.firmware_url}" class="download-btn" download>Download</a>
+              <a href="${fw.firmware_url}"
+                 class="download-btn ${fw.status === 'obsolete' ? 'disabled' : ''}"
+                 ${fw.status === 'obsolete' ? 'tabindex="-1"' : 'download'}>
+                 Download
+              </a>
             </td>
           `;
           tbody.appendChild(versionRow);
 
+          // Create changelog section
           if (fw.changelog && fw.changelog.length > 0) {
             const logRow = document.createElement('tr');
             const logCell = document.createElement('td');
@@ -228,6 +219,12 @@
             logCell.appendChild(changelogDiv);
             logRow.appendChild(logCell);
             tbody.appendChild(logRow);
+
+            // ✅ Click row to toggle changelog
+            versionRow.addEventListener('click', () => {
+              changelogDiv.style.display =
+                changelogDiv.style.display === 'block' ? 'none' : 'block';
+            });
           }
         });
       } catch (err) {
@@ -236,7 +233,6 @@
           '<tr><td colspan="3">❌ Failed to load version.json</td></tr>';
       }
     }
-
     loadFirmwareTable();
   </script>
 </body>
