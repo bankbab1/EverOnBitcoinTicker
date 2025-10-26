@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EverOn Bitcoin Ticker – Firmware Versions</title>
   <style>
     :root {
@@ -12,50 +12,75 @@
       --bg: #fff;
       --text: #1a1a1a;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: "Segoe UI", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 20px;
+      padding: 30px 15px;
       text-align: center;
     }
 
     h1 {
-      font-size: 1.8rem;
-      margin-bottom: 0.3rem;
-      display: flex;
+      font-size: 1.9rem;
+      margin-bottom: 0.2rem;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
     }
+
     h2 {
       font-size: 1rem;
       color: var(--muted);
       margin: 0.8rem 0 1.4rem;
     }
 
+    /* ===== TABLE STYLES ===== */
+    .table-wrapper {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow-x: auto;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
     table {
       width: 100%;
-      max-width: 700px;
-      margin: 0 auto;
       border-collapse: collapse;
+      text-align: left;
+      min-width: 600px;
     }
 
     th, td {
-      padding: 12px 16px;
+      padding: 14px 16px;
       border-bottom: 1px solid #eee;
-      word-break: break-word;
+      vertical-align: middle;
     }
 
     th {
       background: #f3f3f3;
       font-weight: 600;
       font-size: 0.95rem;
+      text-align: center;
+    }
+
+    td {
+      font-size: 0.95rem;
+      text-align: center;
     }
 
     .status-active { color: var(--primary); font-weight: 600; }
     .status-obsolete { color: #999; }
+
+    .release-date {
+      font-size: 0.85rem;
+      color: #666;
+      display: block;
+      margin-top: 2px;
+    }
 
     .download-btn {
       background: var(--primary);
@@ -66,26 +91,35 @@
       font-size: 0.95rem;
       display: inline-block;
       transition: background 0.2s ease;
-      white-space: nowrap;
-    }
-    .download-btn:hover { background: var(--primary-dark); }
-
-    .release-date {
-      font-size: 0.85rem;
-      color: #666;
-      display: block;
-      margin-top: 2px;
     }
 
+    .download-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* ===== CHANGELOG CARD ===== */
     .changelog {
-      display: none;
+      background: #f9fafc;
+      border-left: 4px solid var(--primary);
       text-align: left;
-      font-size: 0.85rem;
-      background: #f8f8f8;
-      padding: 10px 14px;
+      padding: 14px 18px;
+      margin: 12px 0 18px 0;
       border-radius: 8px;
-      margin-top: 6px;
-      line-height: 1.4;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+
+    .changelog strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #000;
+    }
+
+    .changelog ul {
+      margin-left: 18px;
+      padding-left: 0;
+      list-style-type: disc;
     }
 
     footer {
@@ -94,57 +128,38 @@
       color: var(--muted);
     }
 
-    /* 📱 Mobile layout */
-    @media (max-width: 700px) {
-      table, thead, tbody, th, td, tr { display: block; width: 100%; }
-      thead { display: none; }
+    /* ===== MOBILE OPTIMIZATION ===== */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 0.95rem; }
+      body { padding: 20px 10px; }
 
-      tr {
-        background: white;
-        margin-bottom: 14px;
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        padding: 14px;
+      .table-wrapper {
+        box-shadow: none;
+        border-radius: 0;
       }
 
-      td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 0;
-        border: none;
+      table {
+        font-size: 0.9rem;
+        min-width: 100%;
       }
 
-      td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: #555;
-        flex: 1;
-        text-align: left;
+      th, td {
+        padding: 10px 8px;
       }
 
-      td strong, td span, td a {
-        flex: 2;
-        text-align: right;
-      }
-
-      /* ✅ Make Download button full width and fix stacking */
       .download-btn {
         width: 100%;
-        display: block;
+        max-width: 220px;
+        margin: 4px auto;
         text-align: center;
-        margin-top: 10px;
         padding: 12px 0;
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
 
       .changelog {
-        display: none;
-        font-size: 0.9rem;
-        background: #f5f5f5;
-        padding: 10px;
-        border-radius: 8px;
-        margin-top: 8px;
+        margin: 10px 6px 18px;
+        padding: 12px 14px;
       }
     }
   </style>
@@ -153,14 +168,20 @@
   <h1>🚀 EverOn Bitcoin Ticker</h1>
   <h2>Firmware Version Table</h2>
 
-  <table id="firmwareTable">
-    <thead>
-      <tr><th>Version</th><th>Status</th><th>Download</th></tr>
-    </thead>
-    <tbody id="tableBody">
-      <tr><td colspan="3">Loading...</td></tr>
-    </tbody>
-  </table>
+  <div class="table-wrapper">
+    <table id="firmwareTable">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Status</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="3">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <p style="margin-top:16px;">
     📄 <a href="version.json" target="_blank">version.json</a> – for OTA check
@@ -173,53 +194,40 @@
       try {
         const res = await fetch('version.json');
         const data = await res.json();
-
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
 
-        data.firmwares.forEach(fw => {
-          const tr = document.createElement('tr');
+        data.firmwares.forEach((fw) => {
+          const versionRow = document.createElement('tr');
+          versionRow.innerHTML = `
+            <td>
+              <strong>${fw.version}</strong>
+              <span class="release-date">${fw.release_date}</span>
+            </td>
+            <td class="${fw.status === 'active' ? 'status-active' : 'status-obsolete'}">
+              ${fw.status.charAt(0).toUpperCase() + fw.status.slice(1)}
+            </td>
+            <td>
+              <a href="${fw.firmware_url}" class="download-btn" download>Download</a>
+            </td>
+          `;
+          tbody.appendChild(versionRow);
 
-          const versionTd = document.createElement('td');
-          versionTd.setAttribute('data-label', 'Version');
-          versionTd.innerHTML = `<strong>${fw.version}</strong><span class="release-date">${fw.release_date}</span>`;
-
-          const statusTd = document.createElement('td');
-          statusTd.setAttribute('data-label', 'Status');
-          statusTd.textContent = fw.status === 'active' ? 'Active' : 'Obsoleted';
-          statusTd.className = fw.status === 'active' ? 'status-active' : 'status-obsolete';
-
-          const downloadTd = document.createElement('td');
-          downloadTd.setAttribute('data-label', 'Download');
-          const a = document.createElement('a');
-          a.href = fw.firmware_url;
-          a.textContent = 'Download';
-          a.className = 'download-btn';
-          a.setAttribute('download', '');
-          downloadTd.appendChild(a);
-
-          tr.appendChild(versionTd);
-          tr.appendChild(statusTd);
-          tr.appendChild(downloadTd);
-          tbody.appendChild(tr);
-
-          // changelog toggle
           if (fw.changelog && fw.changelog.length > 0) {
-            const logTr = document.createElement('tr');
-            const logTd = document.createElement('td');
-            logTd.colSpan = 3;
+            const logRow = document.createElement('tr');
+            const logCell = document.createElement('td');
+            logCell.colSpan = 3;
+
             const changelogDiv = document.createElement('div');
             changelogDiv.className = 'changelog';
-            changelogDiv.innerHTML = `<strong>Changelog:</strong><ul>` +
-              fw.changelog.map(line => `<li>${line}</li>`).join('') + `</ul>`;
-            logTd.appendChild(changelogDiv);
-            logTr.appendChild(logTd);
-            tbody.appendChild(logTr);
+            changelogDiv.innerHTML = `
+              <strong>Changelog:</strong>
+              <ul>${fw.changelog.map(item => `<li>${item}</li>`).join('')}</ul>
+            `;
 
-            tr.addEventListener('click', () => {
-              changelogDiv.style.display =
-                changelogDiv.style.display === 'block' ? 'none' : 'block';
-            });
+            logCell.appendChild(changelogDiv);
+            logRow.appendChild(logCell);
+            tbody.appendChild(logRow);
           }
         });
       } catch (err) {
@@ -228,6 +236,7 @@
           '<tr><td colspan="3">❌ Failed to load version.json</td></tr>';
       }
     }
+
     loadFirmwareTable();
   </script>
 </body>
