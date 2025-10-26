@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>EverOn Bitcoin Ticker – Firmware Versions</title>
   <style>
     :root {
@@ -12,41 +12,47 @@
       --bg: #fff;
       --text: #1a1a1a;
     }
-    * { box-sizing: border-box; }
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
       font-family: "Segoe UI", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
+      padding: 20px;
       text-align: center;
-      -webkit-text-size-adjust: 100%;
     }
-    h1 { font-size: 1.8rem; margin: 10px 0 4px; }
-    h2 { font-size: 1rem; color: var(--muted); margin: 8px 0 18px; }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    h2 {
+      font-size: 1rem;
+      color: var(--muted);
+      margin: 0.8rem 0 1.4rem;
+    }
 
     table {
       width: 100%;
       max-width: 700px;
       margin: 0 auto;
       border-collapse: collapse;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
+
     th, td {
-      padding: 14px 16px;
+      padding: 12px 16px;
       border-bottom: 1px solid #eee;
       word-break: break-word;
     }
+
     th {
       background: #f3f3f3;
       font-weight: 600;
       font-size: 0.95rem;
     }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #fafafa; }
 
     .status-active { color: var(--primary); font-weight: 600; }
     .status-obsolete { color: #999; }
@@ -54,19 +60,21 @@
     .download-btn {
       background: var(--primary);
       color: white;
-      padding: 10px 14px;
+      padding: 10px 18px;
       border-radius: 8px;
       text-decoration: none;
       font-size: 0.95rem;
       display: inline-block;
       transition: background 0.2s ease;
-      min-width: 100px;
+      white-space: nowrap;
     }
     .download-btn:hover { background: var(--primary-dark); }
 
     .release-date {
       font-size: 0.85rem;
       color: #666;
+      display: block;
+      margin-top: 2px;
     }
 
     .changelog {
@@ -86,28 +94,24 @@
       color: var(--muted);
     }
 
-    /* 📱 Fully mobile-friendly */
+    /* 📱 Mobile layout */
     @media (max-width: 700px) {
-      h1 { font-size: 1.6rem; }
-      h2 { font-size: 0.95rem; }
-      body { padding: 10px; }
-
       table, thead, tbody, th, td, tr { display: block; width: 100%; }
       thead { display: none; }
 
       tr {
         background: white;
-        margin-bottom: 12px;
-        border-radius: 10px;
+        margin-bottom: 14px;
+        border-radius: 12px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        padding: 12px;
+        padding: 14px;
       }
 
       td {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 6px 0;
+        padding: 8px 0;
         border: none;
       }
 
@@ -119,14 +123,19 @@
         text-align: left;
       }
 
-      td span, td strong { flex: 2; text-align: right; }
+      td strong, td span, td a {
+        flex: 2;
+        text-align: right;
+      }
 
+      /* ✅ Make Download button full width and fix stacking */
       .download-btn {
         width: 100%;
+        display: block;
         text-align: center;
-        margin-top: 8px;
-        font-size: 1rem;
+        margin-top: 10px;
         padding: 12px 0;
+        font-size: 1rem;
       }
 
       .changelog {
@@ -173,7 +182,7 @@
 
           const versionTd = document.createElement('td');
           versionTd.setAttribute('data-label', 'Version');
-          versionTd.innerHTML = `<strong>${fw.version}</strong><br><span class="release-date">${fw.release_date}</span>`;
+          versionTd.innerHTML = `<strong>${fw.version}</strong><span class="release-date">${fw.release_date}</span>`;
 
           const statusTd = document.createElement('td');
           statusTd.setAttribute('data-label', 'Status');
@@ -194,7 +203,7 @@
           tr.appendChild(downloadTd);
           tbody.appendChild(tr);
 
-          // changelog section
+          // changelog toggle
           if (fw.changelog && fw.changelog.length > 0) {
             const logTr = document.createElement('tr');
             const logTd = document.createElement('td');
